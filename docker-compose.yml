@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  payment-gateway-api:
+    container_name: payment-gateway-api
+    image: payment-gateway-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    ports: 
+      - 7074:7074
+      - 17074:17074
+    environment:
+      - ConnectionStrings__DefaultConnection=Data Source=sqldb;Initial Catalog=PaymentGatewayDatabase;Integrated Security=False;User Id=sa;Password=@@bbccdd123;MultipleActiveResultSets=True
+      - ASPNETCORE_URLS=http://+:7074
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - sqldb
+
+  sqldb:
+    image: "mcr.microsoft.com/mssql/server:2017-latest"
+    ports: 
+      - 1433:1433 
+    environment:
+      SA_PASSWORD: "@@bbccdd123"
+      ACCEPT_EULA: "Y"
+
+  seq:
+    image: datalust/seq:2021.4
+    ports:
+      - 9000:80
+      - 5341:5341
+    environment:
+      ACCEPT_EULA: Y
+      SEQ_API_INGESTIONPORT: 5341
+      
