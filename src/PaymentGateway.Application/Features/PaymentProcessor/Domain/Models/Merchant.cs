@@ -16,7 +16,12 @@
 
         public string PublicKey { get; set; }
 
-        public Merchant() { }
+        public virtual List<Payment> Payments { get; set; }
+
+        public Merchant()
+        {
+            Payments = new List<Payment>();
+        }
 
         public Merchant(string merchantName) : this()
         {

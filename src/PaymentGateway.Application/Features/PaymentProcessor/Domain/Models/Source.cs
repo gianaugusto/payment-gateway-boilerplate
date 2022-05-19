@@ -12,8 +12,7 @@
             string last4,
             string fingerprint,
             string issuer,
-            string billingAddress,
-            bool saveCard) : this()
+            string billingAddress) : this()
         {
             SourceId = sourceId;
             ExpiryMonth = expiryMonth;
@@ -22,7 +21,6 @@
             Fingerprint = fingerprint;
             Issuer = issuer;
             BillingAddress = billingAddress;
-            SaveCard = saveCard;
         }
 
 
@@ -34,13 +32,10 @@
 
         public string Last4 { get; set; }
 
-        public string? Fingerprint { get; set; } = default;
+        public string? Fingerprint { get; set; } 
 
         public string Issuer { get; set; }
 
-        public string BillingAddress { get; set; }
-
-        public bool SaveCard { get; set; }
-
+        public string? BillingAddress { get; set; }
     }
 }

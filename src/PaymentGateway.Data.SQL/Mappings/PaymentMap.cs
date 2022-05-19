@@ -19,17 +19,13 @@
             builder.Property(x => x.SourceId).IsRequired();
             builder.Property(x => x.Description);
 
+            builder.Property(x => x.IssuerPaymentId).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.CreateDate).IsRequired();
             builder.Property(x => x.Currency).IsRequired();
             builder.Property(x => x.PaymentType).IsRequired();
             builder.Property(x => x.Reference).IsRequired();
             builder.Property(x => x.Status).IsRequired();
-            
-            builder
-                .HasOne(c => c.Merchant)
-                .WithOne()
-                .HasForeignKey<Payment>(a => a.MerchantId);
             
             builder
                 .HasOne(c => c.Source)

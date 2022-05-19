@@ -1,0 +1,27 @@
+{
+  "id": "pay_0001",
+  "action_id": "act_0001",
+  "amount": 500,
+  "currency": "USD",
+  "approved": true,
+  "status": "Authorized",
+  "auth_code": "770687",
+  "response_code": "10000",
+  "response_summary": "Approved",
+  "source": {
+    "type": "card",
+    "id": "src_0001",
+    "last4": "4242",
+    "fingerprint": "F31828E2BDABAE63EB694903825CDD36041CC6ED461440B81415895855502832",
+    "bin": "424242",
+    "billingaddress": "",
+    "issuer": "" 
+  },
+  "customer": {
+    "id": "cus_0001",
+    "email": "gianaugusto@gmail.com",
+    "name": "Giancarlos Macedo"
+  },
+  "processed_on": "2019-09-10T10:11:12Z",
+  "reference": "ORD-5023-4E89"
+}

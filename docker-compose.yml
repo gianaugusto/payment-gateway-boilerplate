@@ -17,6 +17,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - sqldb
+      - mock-server-expectation
+      - seq
 
   sqldb:
     image: "mcr.microsoft.com/mssql/server:2017-latest"
@@ -32,6 +34,23 @@ services:
       - 9000:80
       - 5341:5341
     environment:
-      ACCEPT_EULA: Y
+      ACCEPT_EULA: "Y"
       SEQ_API_INGESTIONPORT: 5341
-      
+
+  mock-server:
+    image: sheyenrath/wiremock.net
+    container_name: mock-server
+    ports:
+      - 1080:80
+
+  mock-server-expectation:
+    container_name: mock-server-expectation
+    image: mock-server-expectation
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: mock-server-expectation
+    environment:
+      - MockServerUrl=http://mock-server:80/
+    depends_on:
+      - mock-server

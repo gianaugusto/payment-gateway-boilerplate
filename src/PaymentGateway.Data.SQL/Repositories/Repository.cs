@@ -16,7 +16,7 @@
 
         public Repository(DbContext context)
         {
-            Db = context;
+            Db = context ?? throw new ArgumentNullException(nameof(context));
             DbSet = Db.Set<TEntity>();
         }
 
@@ -27,7 +27,7 @@
 
         public async Task<TEntity> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await Db.FindAsync<TEntity>(id);
+            return await Db.FindAsync<TEntity>(id, cancellationToken);
         }
 
         public IQueryable<TEntity> Query()

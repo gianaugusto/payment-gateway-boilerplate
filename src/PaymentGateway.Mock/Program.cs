@@ -1,34 +1,28 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿// See https://aka.ms/new-console-template for more information
+using PaymentGateway.Mock.Helper;
 
-// Add services to the container.
+using RestEase;
 
-var app = builder.Build();
+using WireMock.Admin.Mappings;
+using WireMock.Client;
 
-// Configure the HTTP request pipeline.
+var mockServerUrl = Environment.GetEnvironmentVariable("MockServerUrl") ?? "http://localhost:1080/";
 
-app.UseHttpsRedirection();
+var api = RestClient.For<IWireMockAdminApi>(new Uri(mockServerUrl));
 
-var summaries = new[]
+Console.WriteLine(" Reset mappings ");
+
+_ = api.ResetMappingsAsync().GetAwaiter().GetResult();
+
+Console.WriteLine(" Adding Expectations ");
+
+var mappings = new List<MappingModel>()
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    ExpectationsHelper.AddGetPayment("ACTVPTPL", "0001"),
+    ExpectationsHelper.AddPostPayment("ACTVPTPL", "0001"),
 };
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateTime.Now.AddDays(index),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-});
 
-app.Run();
+_ = api.PostMappingsAsync(mappings).GetAwaiter().GetResult();
 
-internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+Console.WriteLine(" Expectations successfully added ");

@@ -16,6 +16,5 @@
         public string Status { get; set; }
 
         public Source Source { get; set; }
-
     }
 }

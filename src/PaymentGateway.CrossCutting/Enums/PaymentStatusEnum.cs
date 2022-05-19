@@ -4,9 +4,10 @@
     {
         Created = 0,
         Pending = 1,
-        Completed  = 2,
+        Authorized = 2,
         Expired = 3,
         Failed = 4,
-        Denied = 5
+        Denied = 5,
+        Completed = 6
     }
 }

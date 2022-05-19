@@ -9,7 +9,8 @@
             int expiryYear,
             string last4,
             string issuer,
-            string billingAddress):this()
+            string billingAddress,
+            bool saveCardInfo) : this()
         {
             SourceId = sourceId;
             ExpiryMonth = expiryMonth;
@@ -17,6 +18,7 @@
             Last4 = last4;
             Issuer = issuer;
             BillingAddress = billingAddress;
+            SaveCardInfo = saveCardInfo;
         }
 
         private protected Source(string sourceId,
@@ -25,12 +27,14 @@
             string last4,
             string issuer,
             string billingAddress,
-            string token) : this(sourceId,
+            string token,
+            bool saveCardInfo) : this(sourceId,
             expiryMonth,
             expiryYear,
             last4,
             issuer,
-            billingAddress)
+            billingAddress,
+            saveCardInfo)
         {
             Token = token;
         }
@@ -45,9 +49,13 @@
 
         public string Issuer { get; set; }
 
+        public string Fingerprint { get; set; }
+
         public string BillingAddress { get; set; }
 
         public string Token { get; set; }
+
+        public bool SaveCardInfo { get; set; }
 
     }
 }

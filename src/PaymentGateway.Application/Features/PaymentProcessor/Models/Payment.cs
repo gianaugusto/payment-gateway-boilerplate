@@ -4,16 +4,10 @@
 
     public class Payment
     {
-        public Payment(Guid merchantId, string paymentType, decimal amount, string currency, string reference, string description)
-        {
-            MerchantId = merchantId;
-            PaymentType = paymentType;
-            Amount = amount;
-            Currency = currency;
-            Reference = reference;
-            Description = description;
-        }
-
+        public Payment() { }
+        
+        public Guid PaymentId { get; set; }
+       
         public Guid MerchantId { get; set; }
 
         public Guid SourceId { get; set; }

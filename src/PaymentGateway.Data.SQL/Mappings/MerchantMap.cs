@@ -20,6 +20,9 @@
             builder.Property(x => x.PublicKey).IsRequired();
             builder.Property(x => x.SuccessUrl).IsRequired();
             builder.Property(x => x.FailureUrl).IsRequired();
+
+            builder.HasMany(o => o.Payments)
+                .WithOne(o => o.Merchant);
         }
 
     }

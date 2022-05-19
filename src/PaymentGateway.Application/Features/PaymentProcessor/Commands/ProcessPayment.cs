@@ -6,6 +6,8 @@
 
     public class ProcessPayment : IRequest<Response<Payment>>
     {
+        public Guid PaymentId { get; set; }
+
         public Guid MerchantId { get; set; }
 
         public Guid CustomerId { get; set; }
