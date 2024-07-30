@@ -1,5 +1,5 @@
-ARG DOTNET_SDK_VERSION=6.0
-ARG DOTNET_RUNTIME_VERSION=6.0
+ARG DOTNET_SDK_VERSION=8.0
+ARG DOTNET_RUNTIME_VERSION=8.0
 
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_SDK_VERSION} as sdk-image
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_RUNTIME_VERSION} as runtime-image

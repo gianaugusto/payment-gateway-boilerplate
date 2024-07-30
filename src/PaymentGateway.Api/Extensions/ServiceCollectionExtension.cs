@@ -1,5 +1,7 @@
 ﻿namespace PaymentGateway.Api.Extensions
 {
+    using System.Reflection;
+
     using Hangfire;
 
     using IdentityModel.Client;
@@ -11,6 +13,7 @@
     using Microsoft.AspNetCore.Mvc.Versioning;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.OpenApi.Models;
 
     using PaymentGateway.Api.Handler;
@@ -29,22 +32,20 @@
 
     public static class ServiceCollectionExtension
     {
-       public static void AddVersioningAndLogs(this WebApplicationBuilder builder)
+        public static void AddVersioningAndLogs(this WebApplicationBuilder builder)
         {
-            builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddApiVersioning(option =>
             {
                 option.DefaultApiVersion = new ApiVersion(1, 0);
                 option.AssumeDefaultVersionWhenUnspecified = true;
                 option.ApiVersionReader = new UrlSegmentApiVersionReader();
-            });
+            }).AddEndpointsApiExplorer();
 
-            builder.Services.AddVersionedApiExplorer(
-                options =>
-                {
-                    options.GroupNameFormat = "'v'VVV";
-                    options.SubstituteApiVersionInUrl = true;
-                });
+            builder.Services.AddControllers();
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             builder.Logging.ClearProviders();
             builder.Host.UseSerilog((ctx, lc) => lc
@@ -54,21 +55,14 @@
 
         public static void AddMediatRApi(this WebApplicationBuilder builder)
         {
-            const string applicationAssemblyName = "PaymentGateway.Application";
-            var assembly = AppDomain.CurrentDomain.Load(applicationAssemblyName);
-
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(FailFastRequestBehavior<,>));
-            builder.Services.AddMediatR(assembly);
         }
 
         public static void UseAuth(this WebApplication app)
         {
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute().RequireAuthorization();
-            });
         }
 
         public static void SetupMigrationAndSeed(this WebApplication app)
@@ -182,7 +176,7 @@
                     { "audience", builder.Configuration["Services:ActivoApi:OAuthSettings:audience"]}
                 }
             });
-            
+
             builder.Services.AddHttpClient<IBankApiClient, ActivoApiClient>(client =>
                 {
                     client.BaseAddress = new Uri(builder.Configuration["Services:ActivoApi:Url"]);
