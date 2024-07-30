@@ -5,7 +5,6 @@
     using Models.PaymentIssuer;
 
     using PaymentGateway.Application.Features.PaymentProcessor.Commands;
-using PaymentGateway.CrossCutting.Enums;
 
     public class MappingProfile : Profile
     {

@@ -19,7 +19,19 @@
             _validators = validators;
         }
 
-        public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        private static Task<TResponse> Errors(IEnumerable<ValidationFailure> failures)
+        {
+            var response = new Response<object>(string.Empty);
+
+            foreach (var failure in failures)
+            {
+                response.AddError(failure.ErrorMessage);
+            }
+
+            return Task.FromResult<TResponse>(response as TResponse);
+        }
+
+        public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             var context = new ValidationContext<TRequest>(request);
             var failures = _validators
@@ -31,18 +43,6 @@
             return failures.Any()
                 ? Errors(failures)
                 : next();
-        }
-
-        private static Task<TResponse> Errors(IEnumerable<ValidationFailure> failures)
-        {
-            var response = new Response<object>(string.Empty);
-
-            foreach (var failure in failures)
-            {
-                response.AddError(failure.ErrorMessage);
-            }
-
-            return Task.FromResult<TResponse>(response as TResponse);
         }
     }
 }
